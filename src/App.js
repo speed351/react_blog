@@ -9,7 +9,7 @@ function App() {
   let posts ='강남 고기 맛집';
   let [modal,setModal] = useState(false);//modal 창이 닫힌상태 false, 열린상태 true
   let [title_modal, setTitleModal] = useState(0);
-
+  let [input, setInput] = useState('');
 
   function title_change(){
     var newArray = [...title];
@@ -21,28 +21,23 @@ function App() {
     newArray[n]++;
     like_edit(newArray);
   }
+  function delete_item(n){
+    var newArray = [...title];
+    newArray.splice(n,1);
+    title_edit(newArray);
+  }
+  function insert_item(input){
+    var newArray = [...title];
+    newArray.unshift(input);
+    title_edit(newArray);
+  }
 
   return (
     <div className="App">
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
-      <button onClick={title_change}>버튼</button>
-      {/* <div className="list">
-        <h3>{title[0]} <span onClick={ ()=>{ like_edit(like+1) }}>👍</span> {like} </h3>
-        <p>5월 3일 발행</p>
-        <hr />
-      </div>
-      <div className="list">
-        <h3>{title[1]}</h3>
-        <p>5월 4일 발행</p>
-        <hr />
-      </div>
-      <div className="list">
-        <h3 onClick={()=>{ setModal(!modal)}}>{title[2]}</h3>
-        <p>5월 5일 발행</p>
-        <hr />
-      </div> */}
+      <button onClick={title_change}>여자 옷 버튼</button>
       {
         title.map(function(a,i){
           return (
@@ -52,16 +47,22 @@ function App() {
                   setTitleModal(i);
                 }}> 
                 {title[i]} 
-                <span onClick={ ()=>{ like_up(i) }}>👍</span> {like[i]}
+                <span onClick={ (e)=>{e.stopPropagation(); like_up(i) }}>👍</span> {like[i]}
               </h3>
               <p>5월 4일 발행</p>
+              <button onClick={()=>{delete_item(i)}}>삭제</button>
               <hr />
             </div>
           )
-
-
         })
       }
+
+      <input onChange={(e)=>{
+        setInput(e.target.value); console.log(input)
+      }} />
+      <button onClick={()=>{insert_item(input)}}>추가</button>
+
+
       {modal == true ? <Modal modal_title={title} func={title_change} title_modal={title_modal}/> : null}
       
       
